@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoDrive - Your Car Marketplace</title>
+  <style>
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f9f9f9; color: #333; }
+    header { background: #0a0a23; padding: 20px; color: #fff; text-align: center; }
+    nav { background: #1e1e3f; display: flex; justify-content: center; padding: 10px 0; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+    .hero { background: url('https://images.unsplash.com/photo-1517142089942-ba376ce32a2e') no-repeat center/cover; height: 300px; display: flex; align-items: center; justify-content: center; color: white; text-shadow: 2px 2px 5px rgba(0,0,0,0.7); font-size: 2em; }
+    section h2 { text-align: center; margin-top: 30px; }
+    .car-list { display: flex; flex-wrap: wrap; justify-content: center; padding: 30px; gap: 20px; }
+    .car-card { background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 280px; overflow: hidden; transition: transform 0.3s; }
+    .car-card:hover { transform: scale(1.02); }
+    .car-card img { width: 100%; height: 180px; object-fit: cover; }
+    .car-info { padding: 15px; }
+    .car-info h3 { margin: 0 0 10px; font-size: 1.1em; }
+    .car-info p { margin: 0 0 10px; color: #666; }
+    .car-info button { margin-top: 5px; padding: 10px; width: 100%; background: #1e1e3f; color: white; border: none; cursor: pointer; }
+    footer { background: #1e1e3f; color: white; text-align: center; padding: 20px; margin-top: 40px; }
+    form input, form textarea { padding: 10px; font-size: 16px; width: 100%; box-sizing: border-box; }
+    form button { background-color: #0a0a23; color: white; border: none; padding: 10px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AutoDrive</h1>
+    <p>Your trusted destination for premium vehicles</p>
+  </header>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Cars for Sale</a>
+    <a href="#">About Us</a>
+    <a href="#">Contact</a>
+  </nav>
+  <div class="hero">Drive Your Dream Car Today</div>
+
+  <!-- Search Filters -->
+  <section>
+    <h2>Find Your Car</h2>
+    <form id="searchForm" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; padding: 20px;">
+      <input type="text" id="brand" placeholder="Brand" />
+      <input type="number" id="maxPrice" placeholder="Max Price" />
+      <input type="number" id="maxMileage" placeholder="Max Mileage" />
+      <button type="button" onclick="filterCars()">Search</button>
+    </form>
+  </section>
+
+  <!-- Car Listings -->
+  <section class="car-list"></section>
+
+  <!-- Contact Form -->
+  <section style="background-color: #eee; padding: 30px;">
+    <h2>Contact Us</h2>
+    <form style="max-width: 500px; margin: auto; display: flex; flex-direction: column; gap: 15px;">
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <textarea placeholder="Message or Inquiry" rows="5" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+
+  <footer>&copy; 2025 AutoDrive. All rights reserved.</footer>
+
+  <script>
+    // Placeholder for car data; replace with your own
+    const cars = [
+  { image: 'https://media.toyota.co.uk/the-2004-toyota-corolla/#lg=1&slide=0', title: '2003 Toyota Corolla', price: 2250, mileage: 86362 },
+  { image: 'https://www.shutterstock.com/image-generated/gray-vw-passat-on-white-bkg-2612098877', title: '2015 Volkswagen Passat', price: 4250, mileage: 150000 },
+  { image: 'https://www.shutterstock.com/image-photo/sicily-italy-jun-29-2018-black-2159066307', title: '2017 Citroen C1 Flair', price: 4500, mileage: 26500 }
+];
+
+    function renderCars(list) {
+      const container = document.querySelector('.car-list');
+      container.innerHTML = '';
+      list.forEach(car => {
+        const card = document.createElement('div');
+        card.className = 'car-card';
+        card.innerHTML = \`
+          <img src="\${car.image}" alt="\${car.title}">
+          <div class="car-info">
+            <h3>\${car.title}</h3>
+            <p>\${formatPrice(car.price)} | \${car.mileage.toLocaleString()} miles</p>
+            <button>I'm Interested</button>
+          </div>\`;
+        container.appendChild(card);
+      });
+    }
+
+    function formatPrice(price) {
+      return '$' + price.toLocaleString();
+    }
+
+    function filterCars() {
+      const brand = document.getElementById('brand').value.toLowerCase();
+      const maxPrice = parseInt(document.getElementById('maxPrice').value);
+      const maxMileage = parseInt(document.getElementById('maxMileage').value);
+      const filtered = cars.filter(car => {
+        const matchesBrand = !brand || car.title.toLowerCase().includes(brand);
+        const matchesPrice = !maxPrice || car.price <= maxPrice;
+        const matchesMileage = !maxMileage || car.mileage <= maxMileage;
+        return matchesBrand && matchesPrice && matchesMileage;
+      });
+      renderCars(filtered);
+    }
+
+    // Initial render
+    window.onload = () => renderCars(cars);
+  </script>
+</body>
+</html>
